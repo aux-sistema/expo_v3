@@ -1,19 +1,22 @@
 <div class="row g-4">
     <!-- Datos Personales -->
+    <div class="col-md-4">
+        <input type="text" name="no_cliente" class="form-control" placeholder="Número de Cliente (ej: cli 43)" required>
+    </div>
     <div class="col-md-6">
         <input type="text" name="nom_completo" class="form-control" placeholder="Nombre completo" required>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
         <input type="tel" name="telefono" class="form-control" placeholder="Teléfono" required>
     </div>
     
-    <div class="col-md-4">
+    <div class="col-md-5">
         <input type="text" name="calle" class="form-control" placeholder="Calle" required>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <input type="text" name="no_ext" class="form-control" placeholder="No. Exterior" required>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <input type="text" name="no_int" class="form-control" placeholder="No. Interior">
     </div>
     
@@ -27,10 +30,10 @@
         <input type="text" name="ciudad" class="form-control" placeholder="Ciudad" required>
     </div>
     
-    <div class="col-md-6">
+    <div class="col-md-5">
         <input type="text" name="estado" class="form-control" placeholder="Estado" required>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
         <input type="text" name="pais" class="form-control" placeholder="País" required>
     </div>
     
@@ -51,23 +54,33 @@
                 <input type="text" name="rfc" class="form-control" placeholder="RFC">
             </div>
             <div class="col-md-6">
-                <input type="text" name="regimen_fiscal" class="form-control" placeholder="Régimen Fiscal">
+                <select name="regimen_fiscal" class="form-select">
+                    <option value="">Seleccione Régimen Fiscal</option>
+                    <option value="Régimen General">Régimen General</option>
+                    <option value="Régimen Simplificado">Régimen Simplificado</option>
+                    <option value="Régimen de Incorporación Fiscal">Régimen de Incorporación Fiscal</option>
+                </select>
             </div>
             <div class="col-md-6">
-                <input type="text" name="uso_cfdi" class="form-control" placeholder="Uso de CFDI">
+                <select name="uso_cfdi" class="form-select">
+                    <option value="">Seleccione Uso de CFDI</option>
+                    <option value="Gastos en general">Gastos en general</option>
+                    <option value="Adquisición de mercancías">Adquisición de mercancías</option>
+                    <option value="Servicios profesionales">Servicios profesionales</option>
+                </select>
             </div>
             <div class="col-md-6">
-                <input type="text" name="codigo_postal" class="form-control" placeholder="Código Postal">
+                <input type="text" name="codigo_postal" class="form-control" placeholder="Código Postal" >
             </div>
             <div class="col-md-6">
-                <input type="email" name="correo" class="form-control" placeholder="Correo electrónico">
+                <input type="email" name="correo" class="form-control" placeholder="Correo electrónico" >
             </div>
         </div>
     </div>
 
     <!-- Switch para cliente nuevo -->
     <div class="form-check form-switch mt-4">
-        <input class="form-check-input" type="checkbox" id="clienteNuevoSwitch">
+        <input class="form-check-input" type="checkbox" id="clienteNuevoSwitch" name="es_cliente_nuevo">
         <label class="form-check-label" for="clienteNuevoSwitch">¿Es Cliente nuevo?</label>
     </div>
 

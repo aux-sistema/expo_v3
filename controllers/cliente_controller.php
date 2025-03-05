@@ -10,6 +10,7 @@ $cliente = new Cliente($db->getConnection());
 // Registrar Cliente
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
     $datosCliente = [
+        ':no_cliente' => $_POST['no_cliente'],
         ':nom_completo' => $_POST['nom_completo'],
         ':telefono' => $_POST['telefono'],
         ':calle' => $_POST['calle'],
@@ -23,12 +24,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
         ':requiere_factura' => isset($_POST['requiere_factura']) ? 1 : 0
     ];
 
-    if ($cliente->crear($datosCliente)) {
-        $_SESSION['mensaje'] = 'Cliente registrado correctamente.';
-    } else {
-        $_SESSION['error'] = 'Error al registrar el cliente.';
+    // Guardar cliente
+    $cliente_id = $cliente->crear($datosCliente);
+
+    if ($cliente_id && isset($_POST['requiere_factura'])) {
+        // Registrar Facturación
+        $datosFacturacion = [
+            ':cliente_id' => $cliente_id, // Usamos el id del cliente recién creado
+            ':razon_social' => $_POST['razon_social'],
+            ':rfc' => $_POST['rfc'],
+            ':regimen_fiscal' => $_POST['regimen_fiscal'],
+            ':uso_cfdi' => $_POST['uso_cfdi'],
+            ':codigo_postal' => $_POST['codigo_postal'],
+            ':correo' => $_POST['correo'],
+            ':es_cliente_nuevo' => isset($_POST['es_cliente_nuevo']) ? 1 : 0,
+            ':como_nos_conocio' => $_POST['como_nos_conocio']
+        ];
+
+        $cliente->registrarFacturacion($datosFacturacion);
     }
 
+    $_SESSION['mensaje'] = 'Cliente registrado correctamente.';
     header('Location: ../views/clientes/add_cliente.php');
     exit();
 }

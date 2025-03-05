@@ -13,5 +13,6 @@
         </div>
     </form>
 </div>
+<script src="../../assets/js/scripts.js"></script>
 
 <?php include '../footer.php'; ?>
