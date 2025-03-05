@@ -41,6 +41,11 @@ class cliente {
         $stmt = $this->conn->prepare($sql);
         return $stmt->execute($data);
     }
+    public function obtenerClientes() {
+        $sql = "SELECT id, no_cliente, nom_completo, telefono, estado, requiere_factura FROM clientes";
+        $stmt = $this->conn->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     private function obtenerUltimoId() {
         $stmt = $this->conn->query("SELECT MAX(id) FROM clientes");

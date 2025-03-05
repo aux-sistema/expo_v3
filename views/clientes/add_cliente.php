@@ -1,4 +1,4 @@
-<?php include 'header.php'; ?>
+<?php include '../header.php'; ?>
 
 <div class="container mt-5">
     <h1 class="titulo-principal text-center mb-5">Registro de Cliente</h1>
@@ -14,4 +14,4 @@
     </form>
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include '../footer.php'; ?>

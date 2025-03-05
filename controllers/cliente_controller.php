@@ -4,10 +4,11 @@ require_once '../models/cliente.php';
 
 session_start();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $db = new Database();
-    $cliente = new Cliente($db->getConnection());
+$db = new Database();
+$cliente = new Cliente($db->getConnection());
 
+// Registrar Cliente
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
     $datosCliente = [
         ':nom_completo' => $_POST['nom_completo'],
         ':telefono' => $_POST['telefono'],
@@ -29,6 +30,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     header('Location: ../views/clientes/add_cliente.php');
+    exit();
+}
+
+// Obtener Clientes (para la tabla)
+if (isset($_GET['action']) && $_GET['action'] == 'obtenerClientes') {
+    $clientes = $cliente->obtenerClientes();
+    
+    // Verifica si hay datos
+    if ($clientes) {
+        // Devuelve los datos en formato JSON
+        header('Content-Type: application/json');
+        echo json_encode(['data' => $clientes]);
+    } else {
+        // Devuelve un JSON vacío si no hay datos
+        header('Content-Type: application/json');
+        echo json_encode(['data' => []]);
+    }
     exit();
 }
 ?>

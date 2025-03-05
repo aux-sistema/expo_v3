@@ -42,6 +42,51 @@
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(74, 105, 189, 0.4);
 }
+/* Estilos para la tabla */
+#clientesTable {
+    width: 100%;
+    margin-top: 1rem;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#clientesTable th, #clientesTable td {
+    padding: 1rem;
+    text-align: center;
+}
+
+#clientesTable th {
+    background-color: #4a69bd;
+    color: white;
+}
+
+#clientesTable tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Estilos para el formulario de facturación */
+#facturaForm {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para la lista desplegable */
+#comoNosConocio {
+    margin-top: 1rem;
+}
+
+/* Estilos para los switches */
+.form-check.form-switch {
+    margin-top: 1.5rem;
+}
+
+.form-check-label {
+    margin-left: 0.5rem;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
