@@ -1,0 +1,55 @@
+/* Estilos Base */
+.titulo-principal {
+    color: #2c3e50;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.formulario-principal {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+/* Campos de Formulario */
+.form-control {
+    border-radius: 25px;
+    padding: 1rem 1.5rem;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s;
+}
+
+.form-control:focus {
+    border-color: #4a69bd;
+    box-shadow: 0 0 10px rgba(74, 105, 189, 0.25);
+}
+
+/* Botón Personalizado */
+.btn-custom {
+    background: linear-gradient(45deg, #4a69bd, #6a89cc);
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 30px;
+    color: white;
+    font-size: 1.1rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 105, 189, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .formulario-principal {
+        padding: 1rem;
+    }
+    
+    .form-control {
+        padding: 0.75rem 1rem;
+    }
+}
