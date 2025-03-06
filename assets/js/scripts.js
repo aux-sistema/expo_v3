@@ -19,7 +19,7 @@ $(document).ready(function () {
             {
                 data: 'id',
                 render: function (data) {
-                    return `<a href="" class="btn btn-sm btn-warning">Editar</a>`;
+                    return `<a href="../../controllers/cliente_controller.php?action=editar&id=${data}" class="btn btn-sm btn-warning">Editar</a>`;
                 }
             }
         ],

@@ -42,6 +42,21 @@
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(74, 105, 189, 0.4);
 }
+
+.btn-customs {
+    background: linear-gradient(45deg, #4a69bd, #6a89cc);
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 30px;
+    color: white;
+    font-size: 1.1rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn-customs:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 105, 189, 0.4);
+}
 /* Estilos para la tabla */
 #clientesTable {
     width: 100%;
