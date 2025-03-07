@@ -26,12 +26,7 @@ if (!isset($base_path)) {
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo $base_path; ?>/admin">Registrar Cliente</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo $base_path; ?>/admin/view">Ver Clientes</a>
-                    </li>
+                    
                 </ul>
                 <!-- Botón de Cerrar Sesión -->
                 <ul class="navbar-nav">
@@ -44,3 +39,4 @@ if (!isset($base_path)) {
     </nav>
     <div class="container mt-4">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    

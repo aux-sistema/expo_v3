@@ -116,11 +116,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             }
         }
         $_SESSION['mensaje'] = 'Cliente actualizado correctamente.';
-        header('Location: ../views/clientes/view_cliente.php');
+        header('Location: ../views/admin/view_cliente.php');
         exit();
     } else {
         $_SESSION['mensaje'] = 'Error al actualizar el cliente.';
-        header('Location: ../views/clientes/edit_cliente.php?id=' . $_POST['id']);
+        header('Location: ../views/admin/edit_cliente.php?id=' . $_POST['id']);
         exit();
     }
 }
@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
     $cliente = $clienteData;
     $facturacion = $facturacionData;
     
-    include '../views/clientes/edit_cliente.php';
+    include '../views/admin/edit_cliente.php';
     exit();
 }
 

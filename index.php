@@ -3,7 +3,14 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
 $base_path = '/expo_v2';
+require_once __DIR__ . '/models/database.php';
+require_once __DIR__ . '/models/cliente.php';
+
+// Crear instancia de la base de datos y del modelo Cliente
+$db = new Database();
+$cliente = new Cliente($db->getConnection());
 
 // Obtener la ruta solicitada
 $request = $_SERVER['REQUEST_URI'];
@@ -14,8 +21,8 @@ $request = explode('?', $request)[0]; // Eliminar parámetros de la URL
 $routes = [
     '/login' => 'views/auth/login.php',
     '/registro' => 'views/auth/registro.php',
-    '/admin' => 'views/clientes/add_cliente.php',
-    '/vendedor' => 'views/vendedor.php',
+    '/admin' => 'views/admin/add_cliente.php',
+    '/vendedor' => 'views/vendedor/view_vendedor.php',
     '/cliente' => 'views/cliente.php',
     '/auth/password/recover' => 'views/auth/password/recover.php',
     '/auth/password/reset_password' => 'views/auth/password/reset_password.php',
@@ -24,49 +31,103 @@ $routes = [
     '/auth/check_session' => 'views/auth/check_session.php',
     '/auth/logout' => 'views/auth/logout.php',
     '/404' => 'views/404.php',
-    '/clientes/edit' => 'views/clientes/edit_cliente.php', // Ruta para editar cliente
-    '/clientes/view' => 'views/clientes/view_cliente.php',
-    '/clientes/controller' => 'controllers/cliente_controller.php',
-    '/clientes/view_factura' => 'views/clientes/view_factura.php',
-    '/clientes/view_envio' => 'views/clientes/view_envio.php',
+    '/403' => 'views/403.php', // Ruta para acceso prohibido
+    '/admin/edit' => 'views/admin/edit_cliente.php', // Ruta para editar cliente
+    '/admin/view' => 'views/admin/view_cliente.php',
+    '/admin/controller' => 'controllers/cliente_controller.php',
+    '/admin/view_factura' => 'views/admin/view_factura.php',
+    '/vendedor/view_vendedor' => 'views/vendedor/view_vendedor.php',
+    '/admin/view_envio' => 'views/admin/view_envio.php',
+    '/vendedor/mis_clientes' => 'views/vendedor/mis_clientes.php', // Ruta exclusiva para vendedores
+    '/cliente/mis_pedidos' => 'views/cliente/mis_pedidos.php', // Ruta exclusiva para clientes
 ];
 
-// Cargar modelos y controladores
-require_once __DIR__ . '/models/database.php';
-require_once __DIR__ . '/models/cliente.php';
+// Función para verificar autenticación y autorización
+function checkAuth($request) {
+    global $base_path;
 
-// Crear instancia de la base de datos y del modelo Cliente
-$db = new Database();
-$cliente = new Cliente($db->getConnection());
+    // Rutas públicas (no requieren autenticación)
+    $public_routes = [
+        '/login', 
+        '/registro', 
+        '/auth/password/recover', 
+        '/auth/password/reset_password', 
+        '/auth/password/reset', 
+        '/auth/password/update_password',
+        '/admin/controller'
+    ];
+
+    // Si la ruta es pública, permitir acceso
+    if (in_array($request, $public_routes)) {
+        return true;
+    }
+
+    // Verificar si el usuario ha iniciado sesión
+    if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+        header('Location: ' . $base_path . '/login');
+        exit();
+    }
+
+    // Definir rutas exclusivas para cada rol
+    $admin_routes = [
+        '/admin',
+        '/admin/edit',
+        '/admin/view',
+
+        '/admin/view_factura',
+        '/admin/view_envio',
+    ];
+
+    $vendedor_routes = [
+        '/vendedor',
+     
+    ];
+
+    $cliente_routes = [
+        '/cliente',
+    ];
+
+    // Verificar si la ruta es exclusiva para administradores
+    if (in_array($request, $admin_routes)) {
+        if ($_SESSION['id_cargo'] !== 1) { // Solo permitir si el rol es admin (id_cargo = 1)
+            header('Location: ' . $base_path . '/403'); // Acceso prohibido
+            exit();
+        }
+    }
+
+    // Verificar si la ruta es exclusiva para vendedores
+    if (in_array($request, $vendedor_routes)) {
+        if ($_SESSION['id_cargo'] !== 2) { // Solo permitir si el rol es vendedor (id_cargo = 2)
+            header('Location: ' . $base_path . '/403'); // Acceso prohibido
+            exit();
+        }
+    }
+
+    // Verificar si la ruta es exclusiva para clientes
+    if (in_array($request, $cliente_routes)) {
+        if ($_SESSION['id_cargo'] !== 3) { // Solo permitir si el rol es cliente (id_cargo = 3)
+            header('Location: ' . $base_path . '/403'); // Acceso prohibido
+            exit();
+        }
+    }
+
+    return true; // Permitir acceso
+}
 
 // Manejo de rutas
 if (array_key_exists($request, $routes)) {
-    // Verificar si la ruta es protegida
-    $protected_routes = ['/admin', '/vendedor', '/cliente'];
-    if (in_array($request, $protected_routes)) {
-        if (!isset($_SESSION['loggedin'])) {
-            header('Location: ' . $base_path . '/login');
-            exit();
-        }
-        $allowed_roles = [
-            '/admin' => 1,
-            '/vendedor' => 2,
-            '/cliente' => 3,
-        ];
-        if ($_SESSION['id_cargo'] !== $allowed_roles[$request]) {
-            header('Location: ' . $base_path . '/404');
-            exit();
-        }
-    }
+    // Verificar autenticación y autorización
+    checkAuth($request);
 
-    if ($request == '/clientes/view_factura' && isset($_GET['id'])) {
+    if ($request == '/vendedor' && isset($_GET['id'])) {
         $clienteData = $cliente->obtenerPorId($_GET['id']);
         $facturacionData = $cliente->obtenerFacturacion($_GET['id']);
         
         if ($clienteData) {
             $cliente = $clienteData;
             $facturacion = $facturacionData;
-            require __DIR__ . '/views/clientes/view_factura.php';
+            define('PROTECTED_ACCESS', true); // Evitar acceso directo a archivos
+            require __DIR__ . '/views/vendedor/view_vendedor.php';
             exit(); // Detener la ejecución después de cargar la vista
         } else {
             header('Location: ' . $base_path . '/404');
@@ -74,45 +135,61 @@ if (array_key_exists($request, $routes)) {
         }
     }
 
-    if ($request == '/clientes/view_envio' && isset($_GET['id'])) {
+    // Manejo de rutas específicas
+    if ($request == '/admin/view_factura' && isset($_GET['id'])) {
         $clienteData = $cliente->obtenerPorId($_GET['id']);
         $facturacionData = $cliente->obtenerFacturacion($_GET['id']);
         
         if ($clienteData) {
             $cliente = $clienteData;
             $facturacion = $facturacionData;
-            require __DIR__ . '/views/clientes/view_envio.php';
+            define('PROTECTED_ACCESS', true); // Evitar acceso directo a archivos
+            require __DIR__ . '/views/admin/view_factura.php';
             exit(); // Detener la ejecución después de cargar la vista
         } else {
             header('Location: ' . $base_path . '/404');
             exit();
         }
     }
-    
-    // Manejo de la ruta de edición de cliente
-    if ($request == '/clientes/edit' && isset($_GET['id'])) {
+
+    if ($request == '/admin/view_envio' && isset($_GET['id'])) {
         $clienteData = $cliente->obtenerPorId($_GET['id']);
         $facturacionData = $cliente->obtenerFacturacion($_GET['id']);
         
         if ($clienteData) {
-            // Pasar los datos a la vista
             $cliente = $clienteData;
             $facturacion = $facturacionData;
-            require __DIR__ . '/views/clientes/edit_cliente.php';
+            define('PROTECTED_ACCESS', true); // Evitar acceso directo a archivos
+            require __DIR__ . '/views/admin/view_envio.php';
+            exit(); // Detener la ejecución después de cargar la vista
         } else {
-            // Si no se encuentra el cliente, redirigir a una página de error
             header('Location: ' . $base_path . '/404');
             exit();
         }
-    } else {
-        // Cargar la vista correspondiente
-        require __DIR__ . '/' . $routes[$request];
     }
+
+    if ($request == '/admin/edit' && isset($_GET['id'])) {
+        $clienteData = $cliente->obtenerPorId($_GET['id']);
+        $facturacionData = $cliente->obtenerFacturacion($_GET['id']);
+        
+        if ($clienteData) {
+            $cliente = $clienteData;
+            $facturacion = $facturacionData;
+            define('PROTECTED_ACCESS', true); // Evitar acceso directo a archivos
+            require __DIR__ . '/views/admin/edit_cliente.php';
+            exit(); // Detener la ejecución después de cargar la vista
+        } else {
+            header('Location: ' . $base_path . '/404');
+            exit();
+        }
+    }
+
+    // Cargar la vista correspondiente
+    define('PROTECTED_ACCESS', true); // Evitar acceso directo a archivos
+    require __DIR__ . '/' . $routes[$request];
 } else {
+    // Ruta no encontrada
     http_response_code(404);
     require __DIR__ . '/views/404.php';
 }
-
-
-
 ?>

@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/../../models/database.php';
+require_once __DIR__ . '/../../models/database.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -14,7 +14,7 @@ header("Pragma: no-cache");
 header("Expires: 0");
 
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
-    header('Location: /clientes/add.php');
+    header('Location: /admin/add.php');
     exit();
 }
 

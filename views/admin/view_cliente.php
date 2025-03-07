@@ -1,4 +1,8 @@
-<?php include __DIR__ . '/../header.php'; ?>
+<?php include __DIR__ . '/../header.php'; 
+if (!defined('PROTECTED_ACCESS')) {
+    header('Location: /expo_v2/403');
+    exit();
+}?>
 
 <div class="container mt-5">
     <h1 class="titulo-principal text-center mb-5">Lista de Clientes</h1>

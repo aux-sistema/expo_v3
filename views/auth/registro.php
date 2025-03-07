@@ -1,5 +1,9 @@
 <?php
-require 'models/database.php'; 
+require_once __DIR__ . '/../../models/database.php';
+
+// Crear una instancia de la clase Database y obtener la conexión
+$database = new Database();
+$conn = $database->getConnection();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $usuario = $_POST['usuario']; 
