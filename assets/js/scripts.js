@@ -55,3 +55,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const inputs = document.querySelectorAll('.form-floating input, .form-floating select');
+    inputs.forEach(input => {
+        if (input.value) {
+            input.nextElementSibling.classList.add('floating');
+        }
+
+        input.addEventListener('input', function () {
+            if (input.value) {
+                input.nextElementSibling.classList.add('floating');
+            } else {
+                input.nextElementSibling.classList.remove('floating');
+            }
+        });
+    });
+});

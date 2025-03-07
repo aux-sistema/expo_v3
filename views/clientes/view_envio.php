@@ -9,12 +9,12 @@ if (!isset($cliente) || !is_array($cliente)) {
 ?>
 
 <div class="container mt-5">
-    <h1 class="titulo-principal text-center mb-5">Datos de Facturación</h1>
+    <h1 class="titulo-principal text-center mb-5">Datos de Envio</h1>
 
     <!-- Se asume que desde el controlador se envían las variables $cliente y $facturacion (si existen) -->
     <form action="<?php echo $base_path; ?>/clientes/controller" method="POST" class="formulario-principal">
         <?php include __DIR__ . '/../partials/messages.php'; ?>
-        <?php include __DIR__ . '/../partials/form_factura.php'; ?>
+        <?php include __DIR__ . '/../partials/form_envio.php'; ?>
 
         <!-- Campo oculto para identificar el cliente -->
         <input type="hidden" name="id" value="<?php echo $cliente['id'] ?? ''; ?>">

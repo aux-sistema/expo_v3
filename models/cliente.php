@@ -133,6 +133,12 @@ class Cliente {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function obtenerEnvio($cliente_id) {
+        $sql = "SELECT * FROM facturacion WHERE cliente_id = :cliente_id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':cliente_id' => $cliente_id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     // Obtener todos los clientes
     public function obtenerClientes() {
         $sql = "SELECT * FROM clientes";

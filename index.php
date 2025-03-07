@@ -59,6 +59,36 @@ if (array_key_exists($request, $routes)) {
         }
     }
 
+    if ($request == '/clientes/view_factura' && isset($_GET['id'])) {
+        $clienteData = $cliente->obtenerPorId($_GET['id']);
+        $facturacionData = $cliente->obtenerFacturacion($_GET['id']);
+        
+        if ($clienteData) {
+            $cliente = $clienteData;
+            $facturacion = $facturacionData;
+            require __DIR__ . '/views/clientes/view_factura.php';
+            exit(); // Detener la ejecución después de cargar la vista
+        } else {
+            header('Location: ' . $base_path . '/404');
+            exit();
+        }
+    }
+
+    if ($request == '/clientes/view_envio' && isset($_GET['id'])) {
+        $clienteData = $cliente->obtenerPorId($_GET['id']);
+        $facturacionData = $cliente->obtenerFacturacion($_GET['id']);
+        
+        if ($clienteData) {
+            $cliente = $clienteData;
+            $facturacion = $facturacionData;
+            require __DIR__ . '/views/clientes/view_envio.php';
+            exit(); // Detener la ejecución después de cargar la vista
+        } else {
+            header('Location: ' . $base_path . '/404');
+            exit();
+        }
+    }
+    
     // Manejo de la ruta de edición de cliente
     if ($request == '/clientes/edit' && isset($_GET['id'])) {
         $clienteData = $cliente->obtenerPorId($_GET['id']);
@@ -82,4 +112,7 @@ if (array_key_exists($request, $routes)) {
     http_response_code(404);
     require __DIR__ . '/views/404.php';
 }
+
+
+
 ?>
