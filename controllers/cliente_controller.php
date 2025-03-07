@@ -1,12 +1,11 @@
 <?php
-require_once '../models/database.php';
-require_once '../models/cliente.php';
-
-session_start();
+require_once __DIR__ . '/../models/database.php';
+require_once __DIR__ . '/../models/cliente.php';
 
 $db = new Database();
 $cliente = new Cliente($db->getConnection());
 
+// Registrar Cliente
 // Registrar Cliente
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
     $datosCliente = [
@@ -24,30 +23,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
         ':requiere_factura' => isset($_POST['requiere_factura']) ? 1 : 0
     ];
 
-    // Guardar cliente
-    $cliente_id = $cliente->crear($datosCliente);
-
-    if ($cliente_id && isset($_POST['requiere_factura'])) {
-        // Registrar Facturación
-        $datosFacturacion = [
-            ':cliente_id' => $cliente_id, // Usamos el id del cliente recién creado
-            ':razon_social' => $_POST['razon_social'],
-            ':rfc' => $_POST['rfc'],
-            ':regimen_fiscal' => $_POST['regimen_fiscal'],
-            ':uso_cfdi' => $_POST['uso_cfdi'],
-            ':codigo_postal' => $_POST['codigo_postal'],
-            ':correo' => $_POST['correo'],
-            ':es_cliente_nuevo' => isset($_POST['es_cliente_nuevo']) ? 1 : 0,
-            ':como_nos_conocio' => $_POST['como_nos_conocio']
-        ];
-
-        $cliente->registrarFacturacion($datosFacturacion);
+    try {
+        // Guardar cliente
+        $cliente_id = $cliente->crear($datosCliente);
+    
+        if ($cliente_id && isset($_POST['requiere_factura'])) {
+            // Registrar Facturación
+            $datosFacturacion = [
+                ':cliente_id' => $cliente_id,
+                ':razon_social' => $_POST['razon_social'],
+                ':rfc' => $_POST['rfc'],
+                ':regimen_fiscal' => $_POST['regimen_fiscal'],
+                ':uso_cfdi' => $_POST['uso_cfdi'],
+                ':codigo_postal' => $_POST['codigo_postal'],
+                ':correo' => $_POST['correo'],
+                ':es_cliente_nuevo' => isset($_POST['es_cliente_nuevo']) ? 1 : 0,
+                ':como_nos_conocio' => $_POST['como_nos_conocio']
+            ];
+            $cliente->registrarFacturacion($datosFacturacion);
+        }
+        $_SESSION['mensaje'] = 'Cliente registrado correctamente.';
+        
+        // Redirigir a admin (ya que solo el admin puede registrar clientes)
+        $base_path = '/expo_v2';
+        header('Location: ' . $base_path . '/admin');
+        exit();
+    } catch (PDOException $e) {
+        // Manejo de error por duplicidad de clave
+        if ($e->getCode() == 23000) {
+            $_SESSION['error'] = 'Error: El número de cliente ya existe.';
+        } else {
+            $_SESSION['error'] = 'Error al registrar el cliente: ' . $e->getMessage();
+        }
+        // Redirigir a la misma ruta de admin para mostrar el mensaje de error
+        $base_path = '/expo_v2';
+        header('Location: ' . $base_path . '/admin');
+        exit();
     }
-
-    $_SESSION['mensaje'] = 'Cliente registrado correctamente.';
-    header('Location: ../views/clientes/add_cliente.php');
-    exit();
+    
 }
+
+
 
 // Actualizar Cliente (Edición)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] == 'actualizar') {

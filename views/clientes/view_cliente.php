@@ -1,4 +1,4 @@
-<?php include '../header.php'; ?>
+<?php include __DIR__ . '/../header.php'; ?>
 
 <div class="container mt-5">
     <h1 class="titulo-principal text-center mb-5">Lista de Clientes</h1>
@@ -20,4 +20,4 @@
     </table>
 </div>
 
-<?php include '../footer.php'; ?>
+<?php include __DIR__ . '/../footer.php'; ?>

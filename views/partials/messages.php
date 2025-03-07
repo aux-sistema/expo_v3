@@ -1,3 +1,9 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+
 <?php if (isset($_SESSION['mensaje'])): ?>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <?= $_SESSION['mensaje'] ?>
