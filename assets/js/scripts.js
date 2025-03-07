@@ -2,7 +2,7 @@ $(document).ready(function () {
     // Configuración de la tabla de clientes
     const table = $('#clientesTable').DataTable({
         ajax: {
-            url: BASE_PATH + '/controllers/cliente_controller?action=obtenerClientes',
+            url: BASE_PATH + '/clientes/controller?action=obtenerClientes',
             dataSrc: 'data'
         },
         columns: [
@@ -19,8 +19,9 @@ $(document).ready(function () {
             {
                 data: 'id',
                 render: function (data) {
-                    return `<a href="${BASE_PATH}/controllers/controller?action=editar&id=${data}" class="btn btn-sm btn-warning">Editar</a>`;
-                }
+                    return ` <a href="${BASE_PATH}/clientes/edit?id=${data}" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="${BASE_PATH}/clientes/view_factura?id=${data}" class="btn btn-sm" style="background-color:rgb(187, 93, 93); color: white;">Factura</a>
+                        <a href="${BASE_PATH}/clientes/view_envio?id=${data}" class="btn btn-sm btn-success">Envío</a>`;                }
             }
         ],
         language: {

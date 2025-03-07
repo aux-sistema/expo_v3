@@ -6,7 +6,6 @@ $db = new Database();
 $cliente = new Cliente($db->getConnection());
 
 // Registrar Cliente
-// Registrar Cliente
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
     $datosCliente = [
         ':no_cliente' => $_POST['no_cliente'],
@@ -62,8 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['action'])) {
     }
     
 }
-
-
 
 // Actualizar Cliente (Edición)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] == 'actualizar') {
@@ -128,7 +125,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 }
 
-// Cargar vista de edición de Cliente
 // Cargar vista de edición de Cliente
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] == 'editar' && isset($_GET['id'])) {
     // Obtén los datos del cliente
