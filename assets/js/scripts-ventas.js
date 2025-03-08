@@ -20,7 +20,7 @@ $(document).ready(function () {
                 data: 'id',
                 render: function (data) {
                     return ` 
-                        <a href="${BASE_PATH}/vendedor/view_factura?id=${data}" class="btn btn-sm" style="background-color:rgb(187, 93, 93); color: white;">Papeleta</a>`;
+                        <a href="${BASE_PATH}/vendedor/add_papeleta?id=${data}" class="btn btn-sm" style="background-color:rgb(187, 93, 93); color: white;">Papeleta</a>`;
                 }
             }
         ],

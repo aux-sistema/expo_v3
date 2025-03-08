@@ -7,7 +7,7 @@ if (!defined('PROTECTED_ACCESS')) {
 <div class="container mt-5">
     <h1 class="titulo-principal text-center mb-5">Registro de Cliente</h1>
     
-    <form action="<?php echo $base_path; ?>/clientes/controller" method="POST" class="formulario-principal">
+    <form action="<?php echo $base_path; ?>/admin/controller" method="POST" class="formulario-principal">
         <?php include __DIR__ . '/../partials/messages.php'; ?>
         <?php include __DIR__ . '/../partials/form_cliente.php'; ?>
         <div class="text-center mt-5">

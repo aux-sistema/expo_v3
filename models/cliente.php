@@ -146,12 +146,5 @@ class Cliente {
         $stmt = $this->conn->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    // Eliminar un cliente
-    public function eliminar($cliente_id) {
-        $sql = "DELETE FROM clientes WHERE id = :cliente_id";
-        $stmt = $this->conn->prepare($sql);
-        return $stmt->execute([':cliente_id' => $cliente_id]);
-    }
 }
 ?>

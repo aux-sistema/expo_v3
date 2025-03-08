@@ -11,7 +11,7 @@ if (!defined('PROTECTED_ACCESS')) {
     <h1 class="titulo-principal text-center mb-5">Editar Cliente</h1>
 
     <!-- Se asume que desde el controlador se envían las variables $cliente y $facturacion (si existen) -->
-    <form action="<?php echo $base_path; ?>/clientes/controller" method="POST" class="formulario-principal">
+    <form action="<?php echo $base_path; ?>/admin/controller" method="POST" class="formulario-principal">
         <?php include __DIR__ . '/../partials/messages.php'; ?>
         <?php include __DIR__ . '/../partials/edit_form_cliente.php'; ?>
 

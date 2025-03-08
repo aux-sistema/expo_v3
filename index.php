@@ -35,11 +35,11 @@ $routes = [
     '/admin/edit' => 'views/admin/edit_cliente.php', // Ruta para editar cliente
     '/admin/view' => 'views/admin/view_cliente.php',
     '/admin/controller' => 'controllers/cliente_controller.php',
+    '/vendedor/controller' => 'controllers/controller_papeleta.php',
     '/admin/view_factura' => 'views/admin/view_factura.php',
     '/vendedor/view_vendedor' => 'views/vendedor/view_vendedor.php',
-    '/admin/view_envio' => 'views/admin/view_envio.php',
-    '/vendedor/mis_clientes' => 'views/vendedor/mis_clientes.php', // Ruta exclusiva para vendedores
-    '/cliente/mis_pedidos' => 'views/cliente/mis_pedidos.php', // Ruta exclusiva para clientes
+    '/admin/view_envio' => 'views/admin/view_envio.php',// Ruta exclusiva para clientes
+    '/vendedor/add_papeleta' => 'views/vendedor/add_papeleta.php',
 ];
 
 // Función para verificar autenticación y autorización
@@ -54,7 +54,8 @@ function checkAuth($request) {
         '/auth/password/reset_password', 
         '/auth/password/reset', 
         '/auth/password/update_password',
-        '/admin/controller'
+        '/admin/controller',
+        '/vendedor/controller'
     ];
 
     // Si la ruta es pública, permitir acceso
@@ -80,6 +81,7 @@ function checkAuth($request) {
 
     $vendedor_routes = [
         '/vendedor',
+        '/vendedor/add_papeleta',
      
     ];
 
@@ -128,6 +130,19 @@ if (array_key_exists($request, $routes)) {
             $facturacion = $facturacionData;
             define('PROTECTED_ACCESS', true); // Evitar acceso directo a archivos
             require __DIR__ . '/views/vendedor/view_vendedor.php';
+            exit(); // Detener la ejecución después de cargar la vista
+        } else {
+            header('Location: ' . $base_path . '/404');
+            exit();
+        }
+    }
+    if ($request == '/vendedor/add_papeleta' && isset($_GET['id'])) {
+        $clienteData = $cliente->obtenerPorId($_GET['id']);
+        
+        if ($clienteData) {
+            $cliente = $clienteData;
+            define('PROTECTED_ACCESS', true); // Evitar acceso directo a archivos
+            require __DIR__ . '/views/vendedor/add_papeleta.php';
             exit(); // Detener la ejecución después de cargar la vista
         } else {
             header('Location: ' . $base_path . '/404');
