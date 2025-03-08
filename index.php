@@ -35,6 +35,7 @@ $routes = [
     '/admin/edit' => 'views/admin/edit_cliente.php', // Ruta para editar cliente
     '/admin/view' => 'views/admin/view_cliente.php',
     '/admin/controller' => 'controllers/cliente_controller.php',
+    '/vendedor/edit' => 'views/vendedor/edit_cliente.php', // Ruta para editar cliente
     '/vendedor/controller' => 'controllers/controller_papeleta.php',
     '/admin/view_factura' => 'views/admin/view_factura.php',
     '/vendedor/view_vendedor' => 'views/vendedor/view_vendedor.php',
@@ -53,6 +54,7 @@ function checkAuth($request) {
         '/auth/password/recover', 
         '/auth/password/reset_password', 
         '/auth/password/reset', 
+        '/admin/edit',
         '/auth/password/update_password',
         '/admin/controller',
         '/vendedor/controller'
@@ -72,7 +74,7 @@ function checkAuth($request) {
     // Definir rutas exclusivas para cada rol
     $admin_routes = [
         '/admin',
-        '/admin/edit',
+        
         '/admin/view',
 
         '/admin/view_factura',
@@ -192,6 +194,22 @@ if (array_key_exists($request, $routes)) {
             $facturacion = $facturacionData;
             define('PROTECTED_ACCESS', true); // Evitar acceso directo a archivos
             require __DIR__ . '/views/admin/edit_cliente.php';
+            exit(); // Detener la ejecución después de cargar la vista
+        } else {
+            header('Location: ' . $base_path . '/404');
+            exit();
+        }
+    }
+
+    if ($request == '/vendedor/edit' && isset($_GET['id'])) {
+        $clienteData = $cliente->obtenerPorId($_GET['id']);
+        $facturacionData = $cliente->obtenerFacturacion($_GET['id']);
+        
+        if ($clienteData) {
+            $cliente = $clienteData;
+            $facturacion = $facturacionData;
+            define('PROTECTED_ACCESS', true); // Evitar acceso directo a archivos
+            require __DIR__ . '/views/vendedor/edit_cliente.php';
             exit(); // Detener la ejecución después de cargar la vista
         } else {
             header('Location: ' . $base_path . '/404');

@@ -47,7 +47,9 @@
         </div>
 
         <div class="text-center mt-5">
-            <button type="submit" class="btn btn-custom">Guardar Cliente</button>
-        </div>
+    <button type="submit" class="btn btn-custom">Guardar Cliente</button>
+    <a href="<?php echo $base_path; ?>/vendedor/edit?id=<?php echo $cliente['id']; ?>" class="btn btn-custom" style="background: #ccc; color: #000; margin-left: 10px;">Factura</a>
+</div>
+
     </form>
 </div>

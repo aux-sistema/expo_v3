@@ -25,9 +25,7 @@ if (!isset($base_path)) {
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    
-                </ul>
+                
                 <!-- Botón de Cerrar Sesión -->
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -39,4 +37,3 @@ if (!isset($base_path)) {
     </nav>
     <div class="container mt-4">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    

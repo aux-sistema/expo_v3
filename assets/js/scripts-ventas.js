@@ -20,6 +20,8 @@ $(document).ready(function () {
                 data: 'id',
                 render: function (data) {
                     return ` 
+                       
+                        <a href="${BASE_PATH}/admin/view_envio?id=${data}" class="btn btn-sm btn-success">Envío</a>
                         <a href="${BASE_PATH}/vendedor/add_papeleta?id=${data}" class="btn btn-sm" style="background-color:rgb(187, 93, 93); color: white;">Papeleta</a>`;
                 }
             }

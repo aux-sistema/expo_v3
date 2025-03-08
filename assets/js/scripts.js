@@ -21,7 +21,8 @@ $(document).ready(function () {
                 render: function (data) {
                     return ` <a href="${BASE_PATH}/admin/edit?id=${data}" class="btn btn-sm btn-warning">Editar</a>
                         <a href="${BASE_PATH}/admin/view_factura?id=${data}" class="btn btn-sm" style="background-color:rgb(187, 93, 93); color: white;">Factura</a>
-                        <a href="${BASE_PATH}/admin/view_envio?id=${data}" class="btn btn-sm btn-success">Envío</a>`;                }
+                        <a href="${BASE_PATH}/admin/view_envio?id=${data}" class="btn btn-sm btn-success">Envío</a>`;
+                }
             }
         ],
         language: {
