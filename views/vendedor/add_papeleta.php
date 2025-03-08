@@ -5,7 +5,7 @@ if (!defined('PROTECTED_ACCESS')) {
 } ?>
 
 <div class="container mt-5">
-    <h1 class="titulo-principal text-center mb-5">Registro de Cliente</h1>
+    <h1 class="titulo-principal text-center mb-5">Registro de Papeleta</h1>
 
     <form action="<?php echo $base_path; ?>/vendedor/controller" method="POST" class="formulario-principal">
         <?php include __DIR__ . '/../partials/messages.php'; ?>
@@ -14,4 +14,3 @@ if (!defined('PROTECTED_ACCESS')) {
 </div>
 <script src="<?php echo $base_path; ?>/assets/js/scripts-ventas.js"></script>
 
-<?php include __DIR__ . '/../footer_ventas.php'; ?>
