@@ -39,8 +39,11 @@ $routes = [
     '/vendedor/controller' => 'controllers/controller_papeleta.php',
     '/admin/view_factura' => 'views/admin/view_factura.php',
     '/vendedor/view_vendedor' => 'views/vendedor/view_vendedor.php',
+    '/vendedor/papeleta/tipo_entrega' => 'views/vendedor/menu_tipo_entrega.php',
     '/admin/view_envio' => 'views/admin/view_envio.php',// Ruta exclusiva para clientes
     '/vendedor/add_papeleta' => 'views/vendedor/add_papeleta.php',
+    '/vendedor/recoleccion' => 'views/vendedor/recoleccion.php',
+
 ];
 
 // Función para verificar autenticación y autorización

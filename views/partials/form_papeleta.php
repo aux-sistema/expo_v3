@@ -45,25 +45,25 @@
                 <label for="quienAtendio">¿Quién atendió?</label>
             </div>
             
-                <div class="col-md-4 form-floating">
-                    <select name="tipo_entrega" class="form-select" id="tipoEntrega" required>
-                        <option value="">Seleccione Tipo de Entrega</option>
-                        <option value="recoleccion">Recolección</option>
-                        <option value="envio">Envío</option>
-                    </select>
-                    <label for="tipoEntrega">¿Tipo de entrega?</label>
-                </div>
-                <div class="col-md-1 text-center">
-                    <button type="button" id="btnValidarEntrega" class="btn rounded-circle"
-                        style="width: 40px; height: 40px; padding: 0; background-color: green; color: white;">
-                        <i class="fa-solid fa-paper-plane"></i>
-                    </button>
-                </div>
-           
+            <!-- Nuevo campo para seleccionar el tipo de entrega -->
+            <div class="col-md-4 form-floating">
+                <select name="tipo_entrega" class="form-select" id="tipoEntrega" required>
+                    <option value="">Seleccione Tipo de Entrega</option>
+                    <option value="recoleccion">Recolección</option>
+                    <option value="envio">Envío</option>
+                </select>
+                <label for="tipoEntrega">¿Tipo de entrega?</label>
+            </div>
+            <div class="col-md-1 text-center">
+                <button type="button" id="btnValidarEntrega" class="btn rounded-circle"
+                    style="width: 40px; height: 40px; padding: 0; background-color: green; color: white;">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
 
             <!-- Botones de acción -->
             <div class="text-center mt-5">
-                <button type="submit" class="btn btn-custom">Guardar Cliente</button>
+                <button type="submit" class="btn btn-custom">Guardar Papeleta</button>
                 <a href="<?php echo $base_path; ?>/vendedor/view_vendedor" class="btn btn-custom"
                     style="background: #ccc; color: #000; margin-left: 10px;">Cancelar</a>
             </div>
@@ -83,6 +83,7 @@
             alert('Por favor, seleccione un tipo de entrega.');
             return;
         }
+        // Redirige a la parte correspondiente según el tipo de entrega seleccionado
         if (tipo === 'recoleccion') {
             window.location.href = "<?php echo $base_path; ?>/vendedor/recoleccion?id=<?php echo $cliente['id']; ?>";
         } else if (tipo === 'envio') {
