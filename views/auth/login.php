@@ -22,7 +22,7 @@ if (!isset($_SESSION['intentos'])) {
     $_SESSION['intentos'] = 0;
 }
 
-$max_intentos = 3; 
+$max_intentos = 9; 
 $tiempo_bloqueo = 300; 
 $login_error = '';
 

@@ -2,7 +2,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <div class="container">
-    <h2>Añadir Papeleta</h2>
     <form action="<?php echo $base_path; ?>/vendedor/controller" method="post">
         <!-- Enviar el id del cliente -->
         <input type="hidden" name="cliente_id" value="<?php echo $cliente['id']; ?>">
@@ -87,7 +86,7 @@
         if (tipo === 'recoleccion') {
             window.location.href = "<?php echo $base_path; ?>/vendedor/recoleccion?id=<?php echo $cliente['id']; ?>";
         } else if (tipo === 'envio') {
-            window.location.href = "<?php echo $base_path; ?>/vendedor/envio?id=<?php echo $cliente['id']; ?>";
+            window.location.href = "<?php echo $base_path; ?>/vendedor/edit_envio?id=<?php echo $cliente['id']; ?>";
         }
     });
 </script>

@@ -14,16 +14,12 @@ $cliente = new Cliente($db->getConnection());
 
 // Obtener la ruta solicitada
 $request = $_SERVER['REQUEST_URI'];
-$request = str_replace($base_path, '', $request); // Eliminar la ruta base
-$request = explode('?', $request)[0]; // Eliminar parámetros de la URL
+$request = str_replace($base_path, '', $request); 
+$request = explode('?', $request)[0]; 
 
-// Definir las rutas del sistema
 $routes = [
     '/login' => 'views/auth/login.php',
     '/registro' => 'views/auth/registro.php',
-    '/admin' => 'views/admin/add_cliente.php',
-    '/vendedor' => 'views/vendedor/view_vendedor.php',
-    '/cliente' => 'views/cliente.php',
     '/auth/password/recover' => 'views/auth/password/recover.php',
     '/auth/password/reset_password' => 'views/auth/password/reset_password.php',
     '/auth/password/reset' => 'views/auth/password/reset.php',
@@ -31,53 +27,57 @@ $routes = [
     '/auth/check_session' => 'views/auth/check_session.php',
     '/auth/logout' => 'views/auth/logout.php',
     '/404' => 'views/404.php',
-    '/403' => 'views/403.php', // Ruta para acceso prohibido
-    '/admin/edit' => 'views/admin/edit_cliente.php', // Ruta para editar cliente
+    '/403' => 'views/403.php',
+
+    '/admin' => 'views/admin/add_cliente.php',
+    '/admin/edit' => 'views/admin/edit_cliente.php',
     '/admin/view' => 'views/admin/view_cliente.php',
     '/admin/controller' => 'controllers/cliente_controller.php',
-    '/vendedor/edit' => 'views/vendedor/edit_cliente.php', // Ruta para editar cliente
-    '/vendedor/controller' => 'controllers/controller_papeleta.php',
     '/admin/view_factura' => 'views/admin/view_factura.php',
+    '/admin/view_envio' => 'views/admin/view_envio.php',
+
+    '/vendedor/controller_envio' => 'controllers/envio.php',
+    '/vendedor/controller' => 'controllers/controller_papeleta.php',
+    '/vendedor' => 'views/vendedor/view_vendedor.php',
+    '/vendedor/edit' => 'views/vendedor/edit_cliente.php',
+    '/vendedor/edit_envio' => 'views/vendedor/edit_cliente_envio.php',
     '/vendedor/view_vendedor' => 'views/vendedor/view_vendedor.php',
     '/vendedor/papeleta/tipo_entrega' => 'views/vendedor/menu_tipo_entrega.php',
-    '/admin/view_envio' => 'views/admin/view_envio.php',// Ruta exclusiva para clientes
     '/vendedor/add_papeleta' => 'views/vendedor/add_papeleta.php',
     '/vendedor/recoleccion' => 'views/vendedor/recoleccion.php',
+    '/vendedor/envio' => 'views/vendedor/envios.php',
 
+    '/cliente' => 'views/cliente.php',
 ];
 
-// Función para verificar autenticación y autorización
-function checkAuth($request) {
+function checkAuth($request)
+{
     global $base_path;
 
-    // Rutas públicas (no requieren autenticación)
     $public_routes = [
-        '/login', 
-        '/registro', 
-        '/auth/password/recover', 
-        '/auth/password/reset_password', 
-        '/auth/password/reset', 
+        '/login',
+        '/registro',
+        '/auth/password/recover',
+        '/auth/password/reset_password',
+        '/auth/password/reset',
         '/admin/edit',
         '/auth/password/update_password',
         '/admin/controller',
         '/vendedor/controller'
     ];
 
-    // Si la ruta es pública, permitir acceso
     if (in_array($request, $public_routes)) {
         return true;
     }
 
-    // Verificar si el usuario ha iniciado sesión
     if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         header('Location: ' . $base_path . '/login');
         exit();
     }
 
-    // Definir rutas exclusivas para cada rol
     $admin_routes = [
         '/admin',
-        
+
         '/admin/view',
 
         '/admin/view_factura',
@@ -87,33 +87,30 @@ function checkAuth($request) {
     $vendedor_routes = [
         '/vendedor',
         '/vendedor/add_papeleta',
-     
+
     ];
 
     $cliente_routes = [
         '/cliente',
     ];
 
-    // Verificar si la ruta es exclusiva para administradores
     if (in_array($request, $admin_routes)) {
-        if ($_SESSION['id_cargo'] !== 1) { // Solo permitir si el rol es admin (id_cargo = 1)
-            header('Location: ' . $base_path . '/403'); // Acceso prohibido
+        if ($_SESSION['id_cargo'] !== 1) { 
+            header('Location: ' . $base_path . '/403'); 
             exit();
         }
     }
 
-    // Verificar si la ruta es exclusiva para vendedores
     if (in_array($request, $vendedor_routes)) {
-        if ($_SESSION['id_cargo'] !== 2) { // Solo permitir si el rol es vendedor (id_cargo = 2)
-            header('Location: ' . $base_path . '/403'); // Acceso prohibido
+        if ($_SESSION['id_cargo'] !== 2) { 
+            header('Location: ' . $base_path . '/403');
             exit();
         }
     }
 
-    // Verificar si la ruta es exclusiva para clientes
     if (in_array($request, $cliente_routes)) {
-        if ($_SESSION['id_cargo'] !== 3) { // Solo permitir si el rol es cliente (id_cargo = 3)
-            header('Location: ' . $base_path . '/403'); // Acceso prohibido
+        if ($_SESSION['id_cargo'] !== 3) { 
+            header('Location: ' . $base_path . '/403'); 
             exit();
         }
     }
@@ -129,7 +126,7 @@ if (array_key_exists($request, $routes)) {
     if ($request == '/vendedor' && isset($_GET['id'])) {
         $clienteData = $cliente->obtenerPorId($_GET['id']);
         $facturacionData = $cliente->obtenerFacturacion($_GET['id']);
-        
+
         if ($clienteData) {
             $cliente = $clienteData;
             $facturacion = $facturacionData;
@@ -143,7 +140,7 @@ if (array_key_exists($request, $routes)) {
     }
     if ($request == '/vendedor/add_papeleta' && isset($_GET['id'])) {
         $clienteData = $cliente->obtenerPorId($_GET['id']);
-        
+
         if ($clienteData) {
             $cliente = $clienteData;
             define('PROTECTED_ACCESS', true); // Evitar acceso directo a archivos
@@ -159,7 +156,7 @@ if (array_key_exists($request, $routes)) {
     if ($request == '/admin/view_factura' && isset($_GET['id'])) {
         $clienteData = $cliente->obtenerPorId($_GET['id']);
         $facturacionData = $cliente->obtenerFacturacion($_GET['id']);
-        
+
         if ($clienteData) {
             $cliente = $clienteData;
             $facturacion = $facturacionData;
@@ -175,7 +172,7 @@ if (array_key_exists($request, $routes)) {
     if ($request == '/admin/view_envio' && isset($_GET['id'])) {
         $clienteData = $cliente->obtenerPorId($_GET['id']);
         $facturacionData = $cliente->obtenerFacturacion($_GET['id']);
-        
+
         if ($clienteData) {
             $cliente = $clienteData;
             $facturacion = $facturacionData;
@@ -191,7 +188,7 @@ if (array_key_exists($request, $routes)) {
     if ($request == '/admin/edit' && isset($_GET['id'])) {
         $clienteData = $cliente->obtenerPorId($_GET['id']);
         $facturacionData = $cliente->obtenerFacturacion($_GET['id']);
-        
+
         if ($clienteData) {
             $cliente = $clienteData;
             $facturacion = $facturacionData;
@@ -207,12 +204,28 @@ if (array_key_exists($request, $routes)) {
     if ($request == '/vendedor/edit' && isset($_GET['id'])) {
         $clienteData = $cliente->obtenerPorId($_GET['id']);
         $facturacionData = $cliente->obtenerFacturacion($_GET['id']);
-        
+
         if ($clienteData) {
             $cliente = $clienteData;
             $facturacion = $facturacionData;
             define('PROTECTED_ACCESS', true); // Evitar acceso directo a archivos
             require __DIR__ . '/views/vendedor/edit_cliente.php';
+            exit(); // Detener la ejecución después de cargar la vista
+        } else {
+            header('Location: ' . $base_path . '/404');
+            exit();
+        }
+    }
+
+    if ($request == '/vendedor/edit_envio' && isset($_GET['id'])) {
+        $clienteData = $cliente->obtenerPorId($_GET['id']);
+        $facturacionData = $cliente->obtenerFacturacion($_GET['id']);
+
+        if ($clienteData) {
+            $cliente = $clienteData;
+            $facturacion = $facturacionData;
+            define('PROTECTED_ACCESS', true); // Evitar acceso directo a archivos
+            require __DIR__ . '/views/vendedor/edit_cliente_envio.php';
             exit(); // Detener la ejecución después de cargar la vista
         } else {
             header('Location: ' . $base_path . '/404');

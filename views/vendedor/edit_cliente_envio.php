@@ -11,9 +11,9 @@ if (!defined('PROTECTED_ACCESS')) {
     <h1 class="titulo-principal text-center mb-5">Editar Cliente</h1>
 
     <!-- Se asume que desde el controlador se envían las variables $cliente y $facturacion (si existen) -->
-    <form action="<?php echo $base_path; ?>/admin/controller" method="POST" class="formulario-principal">
+    <form action="<?php echo $base_path; ?>/vendedor/controller_envio" method="POST" class="formulario-principal">
         <?php include __DIR__ . '/../partials/messages.php'; ?>
-        <?php include __DIR__ . '/../vendedor/edit_form_cliente.php'; ?>
+        <?php include __DIR__ . '/../partials/form_cliente_envio.php'; ?>
 
         <!-- Campo oculto para identificar el cliente a actualizar -->
         <input type="hidden" name="id" value="<?php echo $cliente['id'] ?? ''; ?>">
@@ -22,7 +22,7 @@ if (!defined('PROTECTED_ACCESS')) {
 
         <div class="text-center mt-5">
             <button type="submit" class="btn btn-custom">Actualizar Cliente</button>
-            <a href="<?php echo $base_path; ?>/vendedor/view_vendedor" class="btn btn-custom"
+            <a href="<?php echo $base_path; ?>/vendedor/envio" class="btn btn-custom"
                 style="background: #ccc; color: #000; margin-left: 10px;">Cancelar</a>
               
         </div>
