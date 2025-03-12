@@ -36,7 +36,7 @@ $routes = [
     '/admin/view_factura' => 'views/admin/view_factura.php',
     '/admin/view_envio' => 'views/admin/view_envio.php',
 
-    '/vendedor/controller_envio' => 'controllers/envio.php',
+    '/vendedor/controller_recoleccion' => 'controllers/controller_recoleccion.php',
     '/vendedor/controller' => 'controllers/controller_papeleta.php',
     '/vendedor' => 'views/vendedor/view_vendedor.php',
     '/vendedor/edit' => 'views/vendedor/edit_cliente.php',

@@ -1,93 +1,70 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-require_once __DIR__ . '/../../models/database.php';
-require_once __DIR__ . '/../../models/recoleccion.php';
-
-$base_path = '/expo_v2';
-
-$db = new Database();
-$conn = $db->getConnection();
-
-// Parámetros configurables
-$maxCitasPorHora = 5; // Valor inicial, luego se puede cambiar a 7, etc.
-$horarioInicio   = 10;   // Hora de inicio (10:00 AM)
-$horarioFin      = 18;   // Hora de fin (6:00 PM)
-
-// Se asume que el id del cliente se pasa por GET para redirecciones posteriores
-$cliente_id = $_GET['id'] ?? null;
-
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Calcular las fechas disponibles (5 días: hoy y los próximos 4 días)
-    $availableDates = [];
-    for ($i = 0; $i < 5; $i++) {
-        $availableDates[] = date('Y-m-d', strtotime("+$i days"));
-    }
-    // Incluir la vista del formulario de recolección
-    include __DIR__ . '/../partials/recoleccion_form.php';
-    exit();
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Recoger datos del formulario
-    $id_papeleta = $_POST['id_papeleta'];
-    $fecha       = $_POST['fecha'];
-    $hora        = $_POST['hora'];
-
-    // Validar que la fecha esté dentro del rango permitido
-    $today   = date('Y-m-d');
-    $maxDate = date('Y-m-d', strtotime("+4 days")); // 5 días en total (hoy + 4 días)
-    if ($fecha < $today || $fecha > $maxDate) {
-        $_SESSION['error'] = "La fecha seleccionada no es válida.";
-        header('Location: ' . $base_path . '/vendedor/recoleccion?id=' . $cliente_id);
-        exit();
-    }
-
-    // Validar que la hora esté dentro del horario permitido
-    if (intval($hora) < $horarioInicio || intval($hora) > $horarioFin) {
-        $_SESSION['error'] = "La hora seleccionada no está dentro del horario permitido.";
-        header('Location: ' . $base_path . '/vendedor/recoleccion?id=' . $cliente_id);
-        exit();
-    }
-
-    $recoleccion = new Recoleccion($conn);
-    // Verificar si ya se alcanzó el cupo para esa franja
-    $existingCitas = $recoleccion->getCitasPorHora($fecha, $hora);
-    if ($existingCitas >= $maxCitasPorHora) {
-        $_SESSION['error'] = "La franja horaria seleccionada ya tiene el cupo máximo.";
-        header('Location: ' . $base_path . '/vendedor/recoleccion?id=' . $cliente_id);
-        exit();
-    }
-
-    // Preparar los datos para registrar la cita
-    $data = [
-        'id_papeleta' => $id_papeleta,
-        'fecha'       => $fecha,
-        'hora'        => $hora,
-        'estado'      => 'confirmada'
-    ];
-
-    try {
-        if ($recoleccion->addCita($data)) {
-            $_SESSION['mensaje'] = "Cita de recolección agendada correctamente para $fecha a las $hora:00.";
-            header('Location: ' . $base_path . '/vendedor/recoleccion?id=' . $cliente_id);
-            exit();
-        } else {
-            $_SESSION['error'] = "Error al agendar la cita.";
-            header('Location: ' . $base_path . '/vendedor/recoleccion?id=' . $cliente_id);
-            exit();
-        }
-    } catch (PDOException $e) {
-        // Si el error es por entrada duplicada (código 1062) se envía el mensaje
-        if (isset($e->errorInfo[1]) && $e->errorInfo[1] == 1062) {
-            $_SESSION['error'] = "El número de papeleta ya fue asignado a una cita.";
-        } else {
-            $_SESSION['error'] = "Error al agendar la cita: " . $e->getMessage();
-        }
-        header('Location: ' . $base_path . '/vendedor/recoleccion?id=' . $cliente_id);
-        exit();
-    }
-}
+// Archivo parcial: recoleccion_form.php
 ?>
+<hr>
+<h5>Datos para Recolección</h5>
+<div class="row g-4 mt-3">
+    <!-- Campo readonly para mostrar el folio (opcional) -->
+    <div class="col-md-6 form-floating">
+        <input type="text" name="folio_recoleccion" class="form-control" id="folioRecoleccionExtra" placeholder="Folio de la Papeleta" readonly>
+        <label for="folioRecoleccionExtra">Folio de la Papeleta</label>
+    </div>
+    <!-- Campo para Lugar de Recolección -->
+    <div class="col-md-6 form-floating">
+        <input type="text" name="lugar_recoleccion" class="form-control" id="lugarRecoleccion" placeholder="Lugar de Recolección" required>
+        <label for="lugarRecoleccion">Lugar de Recolección</label>
+    </div>
+</div>
+<div class="row g-4 mt-3">
+    <!-- Selector de fecha (limitado a los próximos 5 días) -->
+    <div class="col-md-6 form-floating">
+        <input type="date" name="fecha_recoleccion" class="form-control" id="fechaRecoleccionExtra" required>
+        <label for="fechaRecoleccionExtra">Fecha de Recolección</label>
+    </div>
+    <!-- Selector de hora (entre 10:00 y 18:00) -->
+    <div class="col-md-6 form-floating">
+        <select name="hora_recoleccion" class="form-select" id="horaRecoleccionExtra" required>
+            <option value="">Seleccione la hora</option>
+            <option value="10:00:00">10:00</option>
+            <option value="11:00:00">11:00</option>
+            <option value="12:00:00">12:00</option>
+            <option value="13:00:00">13:00</option>
+            <option value="14:00:00">14:00</option>
+            <option value="15:00:00">15:00</option>
+            <option value="16:00:00">16:00</option>
+            <option value="17:00:00">17:00</option>
+            <option value="18:00:00">18:00</option>
+        </select>
+        <label for="horaRecoleccionExtra">Hora de Recolección</label>
+    </div>
+</div>
+
+<script>
+    // Copia el valor del folio principal al campo readonly del formulario de recolección
+    const mainFolio = document.getElementById('folioPapeleta');
+    const extraFolio = document.getElementById('folioRecoleccionExtra');
+    if(mainFolio && extraFolio) {
+        extraFolio.value = mainFolio.value;
+        mainFolio.addEventListener('input', function() {
+            extraFolio.value = this.value;
+        });
+    }
+    
+    // Configurar el selector de fecha para limitarlo a los próximos 5 días
+    const fechaExtra = document.getElementById('fechaRecoleccionExtra');
+    const today = new Date();
+    // Formatear la fecha actual en formato YYYY-MM-DD
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+    const minDate = `${yyyy}-${mm}-${dd}`;
+    fechaExtra.min = minDate;
+    // Calcular el máximo: 5 días desde hoy
+    let maxDateObj = new Date();
+    maxDateObj.setDate(today.getDate() + 5);
+    const ddMax = String(maxDateObj.getDate()).padStart(2, '0');
+    const mmMax = String(maxDateObj.getMonth() + 1).padStart(2, '0');
+    const yyyyMax = maxDateObj.getFullYear();
+    const maxDate = `${yyyyMax}-${mmMax}-${ddMax}`;
+    fechaExtra.max = maxDate;
+</script>

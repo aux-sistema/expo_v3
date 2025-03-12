@@ -1,32 +1,22 @@
 <?php
-class Recoleccion {
+class recoleccion {
     private $conn;
-    private $table = "recolecciones";
-
+    
     public function __construct($db) {
         $this->conn = $db;
     }
-
-    // Inserta una nueva cita de recolección
-    public function addCita($data) {
-        $sql = "INSERT INTO " . $this->table . " (id_papeleta, fecha, hora, estado) VALUES (:id_papeleta, :fecha, :hora, :estado)";
+    
+    // Inserta un registro de recolección en la tabla
+    public function addRecoleccion($data) {
+        $sql = "INSERT INTO recoleccion (id_papeleta, id_cita, fecha_recoleccion, hora_recoleccion, lugar_recoleccion) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':id_papeleta', $data['id_papeleta']);
-        $stmt->bindParam(':fecha', $data['fecha']);
-        $stmt->bindParam(':hora', $data['hora']);
-        $stmt->bindParam(':estado', $data['estado']);
-        return $stmt->execute();
-    }
-
-    // Retorna la cantidad de citas agendadas para una fecha y hora
-    public function getCitasPorHora($fecha, $hora) {
-        $sql = "SELECT COUNT(*) as count FROM " . $this->table . " WHERE fecha = :fecha AND hora = :hora";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':fecha', $fecha);
-        $stmt->bindParam(':hora', $hora);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['count'];
+        return $stmt->execute([
+            $data['id_papeleta'],       // Línea 1
+            $data['id_cita'],           // Línea 2
+            $data['fecha_recoleccion'], // Línea 3
+            $data['hora_recoleccion'],  // Línea 4
+            $data['lugar_recoleccion']  // Línea 5
+        ]);
     }
 }
 ?>
