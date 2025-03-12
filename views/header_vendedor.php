@@ -5,6 +5,7 @@ if (!isset($base_path)) {
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +18,7 @@ if (!isset($base_path)) {
         var BASE_PATH = '<?php echo $base_path; ?>';
     </script>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
@@ -25,8 +27,11 @@ if (!isset($base_path)) {
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                
-                <!-- Botón de Cerrar Sesión -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo $base_path; ?>/vendedor/papeleta/mesas">Mesas</a>
+                    </li>
+                </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo $base_path; ?>/auth/logout">Cerrar Sesión</a>
@@ -36,4 +41,4 @@ if (!isset($base_path)) {
         </div>
     </nav>
     <div class="container mt-4">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

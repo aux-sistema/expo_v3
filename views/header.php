@@ -12,7 +12,6 @@ if (!isset($base_path)) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo $base_path; ?>/assets/css/styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-    <!-- Variable global para JavaScript -->
     <script>
         var BASE_PATH = '<?php echo $base_path; ?>';
     </script>
