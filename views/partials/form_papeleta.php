@@ -34,6 +34,9 @@
                     <option value="Oro">Oro</option>
                     <option value="Plata">Plata</option>
                     <option value="Otros">Otros</option>
+                    <option value="Plata, Oro">Plata, Oro</option>
+                    <option value="Oro, Otros">Oro, Otros</option>
+                    <option value="Plata, Otros">Plata, Otros</option>
                 </select>
                 <label for="metales">Tipo de Metal</label>
             </div>
@@ -95,7 +98,7 @@
             <!-- Botón para revisar datos de envío -->
             <div class="col-md-6 form-floating mt-3">
                 <button type="button" class="btn btn-custom"
-                    onclick="window.location.href='<?php echo $base_path; ?>/vendedor/edit?id=<?php echo $cliente['id']; ?>'">Revisar
+                    onclick="window.location.href='<?php echo $base_path; ?>/vendedor/edit_envio?id=<?php echo $cliente['id']; ?>'">Revisar
                     Datos de Envío</button>
             </div>
             <div class="row g-6 mt-3">
@@ -160,7 +163,7 @@
         <!-- Botón para enviar el formulario completo -->
         <div class="text-center mt-5">
             <button type="submit" class="btn btn-custom">Guardar Papeleta</button>
-            <a href="<?php echo $base_path; ?>/vendedor/view_vendedor?id=<?php echo $cliente['id']; ?>"
+            <a href="<?php echo $base_path; ?>/vendedor/view_vendedor"
                 class="btn btn-custom" style="background: #ccc; color: #000; margin-left: 10px;">Cancelar</a>
         </div>
     </form>

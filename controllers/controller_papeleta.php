@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $_SESSION['error'] = "Error de BD: " . $ex->getMessage();
         }
-        header("Location: {$base_path}/vendedor/add_papeleta.php?id=" . $data['cliente_id']);
+        header("Location: {$base_path}/vendedor/add_papeleta?id=" . $data['cliente_id']);
         exit();
 
     } catch (Exception $e) {
@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $pdo->rollBack();
         }
         $_SESSION['error'] = $e->getMessage();
-        header("Location: {$base_path}/vendedor/add_papeleta.php?id=" . $data['cliente_id']);
+        header("Location: {$base_path}/vendedor/add_papeleta?id=" . $data['cliente_id']);
         exit();
     }
 
