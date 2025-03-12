@@ -22,9 +22,8 @@ if (!defined('PROTECTED_ACCESS')) {
 
         <div class="text-center mt-5">
             <button type="submit" class="btn btn-custom">Actualizar Cliente</button>
-            <a href="<?php echo $base_path; ?>/vendedor/view_vendedor" class="btn btn-custom"
+            <a href="<?php echo $base_path; ?>/vendedor/add_papeleta?id=<?php echo $cliente['id']; ?>" class="btn btn-custom"
                 style="background: #ccc; color: #000; margin-left: 10px;">Cancelar</a>
-              
         </div>
     </form>
 </div>

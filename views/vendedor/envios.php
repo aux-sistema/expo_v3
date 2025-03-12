@@ -22,12 +22,6 @@
                        value="<?php echo htmlspecialchars($papeleta['folio_papeleta']); ?>" readonly>
                 <label for="folioPapeleta">Folio de la Papeleta</label>
             </div>
-            <!-- Campo específico para envío -->
-            <div class="col-md-6 form-floating">
-                <input type="text" name="direccion_envio" class="form-control" id="direccionEnvio"
-                       placeholder="Dirección de envío" required>
-                <label for="direccionEnvio">Dirección de Envío</label>
-            </div>
         </div>
         <div class="text-center mt-5">
             <button type="submit" class="btn btn-custom">Guardar Envío</button>
