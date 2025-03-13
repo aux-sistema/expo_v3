@@ -16,5 +16,13 @@ class Mesa {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getById($idMesa) {
+        $sql = "SELECT * FROM mesas WHERE id_mesa = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':id', $idMesa, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
 }
 ?>

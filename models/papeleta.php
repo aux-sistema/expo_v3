@@ -48,7 +48,14 @@ class Papeleta {
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
+    public function countAsignacionesMesa($idMesa) {
+        $sql = "SELECT COUNT(*) AS total FROM papeletas WHERE id_mesa = :id_mesa";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':id_mesa', $idMesa, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'] ?? 0;
+    }
     // Método para actualizar la asignación de mesa en la papeleta
     public function updateMesa($idPapeleta, $idMesa) {
         $sql = "UPDATE papeletas SET id_mesa = :id_mesa WHERE id_papeleta = :id";
