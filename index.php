@@ -46,8 +46,9 @@ $routes = [
     '/vendedor/add_papeleta' => 'views/vendedor/add_papeleta.php',
     '/vendedor/recoleccion' => 'views/vendedor/recoleccion.php',
     '/vendedor/envio' => 'views/vendedor/envios.php',
-
-    '/cliente' => 'views/cliente.php',
+    '/vendedor/papeleta/mesa' => 'views/mesa/listar_papeletas.php',
+    '/vendedor/papeleta/asignar_mesas' => 'views/mesa/asignar_mesa.php',
+    '/vendedor/papeleta/mesas' => 'controllers/controller_mesa.php',
 ];
 
 function checkAuth($request)
@@ -64,7 +65,7 @@ function checkAuth($request)
         '/auth/password/update_password',
         '/admin/controller',
         '/vendedor/controller'
-    ];
+    ]; 
 
     if (in_array($request, $public_routes)) {
         return true;
@@ -77,9 +78,7 @@ function checkAuth($request)
 
     $admin_routes = [
         '/admin',
-
         '/admin/view',
-
         '/admin/view_factura',
         '/admin/view_envio',
     ];
@@ -87,7 +86,6 @@ function checkAuth($request)
     $vendedor_routes = [
         '/vendedor',
         '/vendedor/add_papeleta',
-
     ];
 
     $cliente_routes = [
@@ -115,7 +113,7 @@ function checkAuth($request)
         }
     }
 
-    return true; // Permitir acceso
+    return true;
 }
 
 // Manejo de rutas
