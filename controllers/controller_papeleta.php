@@ -11,6 +11,23 @@ require_once __DIR__ . '/../models/recoleccion.php';
 
 $base_path = '/expo_v2';
 
+// Si es una petición GET y se pide obtener las papeletas:
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'obtenerPapeletas') {
+    header('Content-Type: application/json');
+    $db = new Database();
+    $pdo = $db->getConnection();
+    $papeletaModel = new Papeleta($pdo);
+    
+    // Opcional: capturar parámetros de búsqueda y orden si se envían
+    $search = $_GET['search'] ?? '';
+    $order  = $_GET['order'] ?? 'DESC';
+    
+    $data = $papeletaModel->getAll($search, $order);
+    echo json_encode(['data' => $data]);
+    exit();
+}
+
+// Si es una petición POST, se procesa el registro de una papeleta
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Datos generales de la papeleta
@@ -55,14 +72,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $envioData = [
                 'id_papeleta'     => $idPapeleta,
                 'direccion_envio' => trim($_POST['direccion_envio'] ?? ''),
-                // Campo opcional: fecha_envio, si se utiliza
                 'fecha_envio'     => trim($_POST['fecha_envio'] ?? null)
             ];
             $envio = new Envio($pdo);
             if (!$envio->addEnvio($envioData)) {
                 throw new Exception("Error al guardar los datos de envío.");
             }
-
         } elseif ($data['tipo_entrega'] === 'recoleccion') {
             // Validar campos obligatorios de recolección
             if (empty($_POST['fecha_recoleccion']) || empty($_POST['hora_recoleccion']) || empty($_POST['lugar_recoleccion'])) {
@@ -119,14 +134,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Redirigir según si se requiere factura o no
         if ($necesitaFactura === 'si') {
-            // Si se requiere factura, redirigir a la ruta de facturación
             header("Location: {$base_path}/vendedor/edit?id=" . $data['cliente_id']);
             exit();
         } else {
             header("Location: {$base_path}/vendedor/view_vendedor?id=" . $data['cliente_id']);
             exit();
         }
-
     } catch (PDOException $ex) {
         if ($pdo->inTransaction()) {
             $pdo->rollBack();
@@ -138,7 +151,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         header("Location: {$base_path}/vendedor/add_papeleta?id=" . $data['cliente_id']);
         exit();
-
     } catch (Exception $e) {
         if ($pdo->inTransaction()) {
             $pdo->rollBack();
@@ -147,7 +159,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: {$base_path}/vendedor/add_papeleta?id=" . $data['cliente_id']);
         exit();
     }
-
 } else {
     header("Location: {$base_path}");
     exit();
